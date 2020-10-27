@@ -3,3 +3,10 @@
 ################################################################################
 
 /Temp
+/Packages
+/obj/Debug
+/MarioPlan.sln
+/Logs
+/Library
+/Assembly-CSharp-Editor.csproj
+/.vs

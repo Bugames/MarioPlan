@@ -10,3 +10,4 @@
 /Library
 /Assembly-CSharp-Editor.csproj
 /.vs
+*.csproj

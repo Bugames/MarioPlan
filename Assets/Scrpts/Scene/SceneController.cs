@@ -83,6 +83,7 @@ public class SceneController : MonoBehaviour
 	/// 开始进入加载场景
 	/// </summary>
 	public void StartLoadingScene()
+
 	{
 		SceneManager.LoadScene(1);
 	}
@@ -105,7 +106,7 @@ public class SceneController : MonoBehaviour
 
 	public void EnterGameScene()
 	{
-		StartLoadingScene(3);
+		SceneManager.LoadScene(3);
 	}
 
 	/// <summary>

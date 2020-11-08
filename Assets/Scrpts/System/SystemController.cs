@@ -1,10 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using UnityEngine;
 using UnityEngine.UI;
 public class SystemController : MonoBehaviour {
 
 	#region public Member
+	/// <summary>
+	/// 歌曲字典
+	/// </summary>
+	public Dictionary<int, string> songDic;
+	/// <summary>
+	/// 当前歌曲的索引
+	/// </summary>
+	public int songIndex = 0;
 	#endregion
 
 	#region 单例实现
@@ -42,16 +51,21 @@ public class SystemController : MonoBehaviour {
 			return;
 		}
 		m_Instance = this;
+		DontDestroyOnLoad(this);
 	}
-
-    #region public Method
-    private void Start()
+	private void Start()
+	{
+		songDic = new Dictionary<int, string>();
+	}
+	#region public Method
+	public void Init()
     {
+		//读取歌曲信息
     }
-    #endregion
+	#endregion
 
-    #region private Method
+	#region private Method
 
-    #endregion
+	#endregion
 
 }

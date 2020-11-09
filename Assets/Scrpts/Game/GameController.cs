@@ -25,6 +25,10 @@ public class GameController : MonoBehaviour {
 	/// </summary>
 	public GameState currGameState;
 	/// <summary>
+	/// 当前场景的Show
+	/// </summary>
+	public GameShow currGameShow;
+	/// <summary>
 	/// 暂停按钮
 	/// </summary>
 	public Button pauseButton;
@@ -87,10 +91,12 @@ public class GameController : MonoBehaviour {
 	{
 		InitButtonEvent();
 		currGameState = GameState.Ready;
+		StartCoroutine("ReadyForGame");
 	}
 
     private void Update()
     {
+		
     }
 
     #region public Method
@@ -101,27 +107,62 @@ public class GameController : MonoBehaviour {
     {
 		pauseButton.onClick.AddListener(delegate () 
 		{
-			pauseMenu.SetActive(true);
-			Time.timeScale = 0.0f;
-			currGameState = GameState.Pause;
+			PauseGame();
 		});
 
 		pauseMenu.GetComponent<TwoSelect>().first.onClick.AddListener(delegate ()
 		{
-			pauseMenu.SetActive(false);
-			Time.timeScale = 1.0f;
-			currGameState = GameState.Playing;
+			UnPauseGame();
 		});
 
 		pauseMenu.GetComponent<TwoSelect>().second.onClick.AddListener(delegate ()
 		{
 			SceneController.Instance.EnterMainWorldScene();
+			MusicController.Instance.BGMGameObject.GetComponent<AudioSource>().Pause();
+			MusicController.Instance.BGMGameObject.GetComponent<AudioSource>().clip = null;
 		});
 
 		endReturnButton.onClick.AddListener(delegate ()
 		{
 			SceneController.Instance.EnterMainWorldScene();
 		});
+	}
+	/// <summary>
+	/// 开始游戏
+	/// </summary>
+	public void StartGame()
+    {
+		string musicName = "Music/" + SystemController.Instance.GetSongName();
+		AudioClip bgm = Resources.Load<AudioClip>(musicName);
+		MusicController.Instance.BGMGameObject.GetComponent<AudioSource>().clip = bgm;
+		MusicController.Instance.BGMGameObject.GetComponent<AudioSource>().Play();
+	}
+	/// <summary>
+	/// 触发游戏结束
+	/// </summary>
+	public void EndGame()
+    {
+
+    }
+	/// <summary>
+	/// 游戏暂停
+	/// </summary>
+	public void PauseGame()
+    {
+		pauseMenu.SetActive(true);
+		Time.timeScale = 0.0f;
+		currGameState = GameState.Playing;
+		MusicController.Instance.BGMGameObject.GetComponent<AudioSource>().Pause();
+	}
+	/// <summary>
+	/// 取消游戏暂停
+	/// </summary>
+	public void UnPauseGame()
+    {
+		pauseMenu.SetActive(false);
+		Time.timeScale = 1.0f;
+		currGameState = GameState.Playing;
+		MusicController.Instance.BGMGameObject.GetComponent<AudioSource>().Play();
 	}
 	/// <summary>
 	/// 触发结束界面
@@ -137,16 +178,15 @@ public class GameController : MonoBehaviour {
 	/// <returns></returns>
 	public IEnumerator ReadyForGame()
     {
-		Time.timeScale = 0.0f;
-		while(startTime>0)
-        {
+		while (startTime > 0)
+		{
 			startTime -= Time.deltaTime;
-			//TODO:倒计时效果
 			yield return 0;
 		}
 		Time.timeScale = 1.0f;
 		currGameState = GameState.Playing;
-    }
+		StartGame();
+	}
 	#endregion
 
 	#region private Method

@@ -16,6 +16,10 @@ public class MusicController : MonoBehaviour {
 
     #region public Member
     /// <summary>
+    /// BGM
+    /// </summary>
+    public GameObject BGMGameObject;
+    /// <summary>
     /// 音量大小
     /// </summary>
     public float volume { get; private set; } = 0.75f;
@@ -76,6 +80,7 @@ public class MusicController : MonoBehaviour {
         }
         m_Instance = this;
         DontDestroyOnLoad(gameObject);
+        DontDestroyOnLoad(BGMGameObject);
         InitMusicAudios();
         InitSoundEffectsAudios();
         fadeState = FadeState.High;

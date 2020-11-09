@@ -887,8 +887,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71ec2105501687b4a91e06be5b8b12b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AllMusicAudios:
-  - {fileID: 1575065022}
+  BGMGameObject: {fileID: 1575065022}
+  AllMusicAudios: []
   AllSoundEffectsAudios: []
   AllMusicAudioSource: []
   AllSoundEffectsAudioSource: []
@@ -936,6 +936,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   songIndex: 0
+  songs:
+  - First
 --- !u!1 &888358468
 GameObject:
   m_ObjectHideFlags: 0

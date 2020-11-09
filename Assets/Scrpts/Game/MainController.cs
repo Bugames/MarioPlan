@@ -63,13 +63,12 @@ public class MainController : MonoBehaviour {
 	/// </summary>
 	public void InitDrop()
     {
-		List<Dropdown.OptionData> options = new List<Dropdown.OptionData>();
 		foreach(var temp in SystemController.Instance.songDic)
 		{
 			Dropdown.OptionData optionData = new Dropdown.OptionData();
 			optionData.text = temp.Value;
+			songDropDown.options.Add(optionData);
 		}
-		songDropDown.AddOptions(options);
     }
 
 	/// <summary>

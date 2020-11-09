@@ -76,6 +76,14 @@ public class TileMapController : MonoBehaviour {
 	/// 临时存储sky对象的队列
 	/// </summary>
 	private Queue<GameObject> skyQueue;
+	/// <summary>
+	/// 游戏控制实例
+	/// </summary>
+	private GameController gameController;
+	/// <summary>
+	/// 道具管理实例
+	/// </summary>
+	private PropManager propManager;
 	#endregion
 
 	private void Awake()
@@ -92,6 +100,8 @@ public class TileMapController : MonoBehaviour {
 
     private void Start()
     {
+		gameController = GameController.Instance;
+		propManager = PropManager.Instance;
 		InitTile();
 		InitSky();
 		lastpostion0 = role.transform.position;
@@ -99,7 +109,10 @@ public class TileMapController : MonoBehaviour {
 
     private void Update()
     {
-		UpdataMap();
+		if(gameController.currGameState==GameController.GameState.Playing)
+        {
+			UpdataMap();
+		}
 	}
 
     #region public Method
@@ -111,6 +124,7 @@ public class TileMapController : MonoBehaviour {
 			for(int i=0;i<skyLength;++i)
             {
 				UpdateInitTile();
+				propManager.UpdateProp();
 			}
 			if(updatecount==0)
             {

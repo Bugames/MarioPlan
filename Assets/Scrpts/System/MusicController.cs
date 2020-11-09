@@ -15,6 +15,17 @@ public class MusicController : MonoBehaviour {
     }
 
     #region public Member
+    /// <summary>
+    /// BGM
+    /// </summary>
+    public GameObject BGMGameObject;
+    /// <summary>
+    /// 音量大小
+    /// </summary>
+    public float volume { get; private set; } = 0.75f;
+
+    public bool isMute { get; private set; } = false;
+
     [Tooltip("所有音乐播放器")]
     public GameObject[] AllMusicAudios;
     [Tooltip("所有音效播放器")]
@@ -61,32 +72,18 @@ public class MusicController : MonoBehaviour {
     #endregion
 
     private void Awake()
-	{
-		if(m_Instance!=null)
-		{
-			Destroy(gameObject);
-			return;
-		}
-		m_Instance = this;
+    {
+        if (m_Instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        m_Instance = this;
         DontDestroyOnLoad(gameObject);
+        DontDestroyOnLoad(BGMGameObject);
         InitMusicAudios();
         InitSoundEffectsAudios();
         fadeState = FadeState.High;
-    }
-
-    private void Update()
-    {
-        Scene scene = SceneManager.GetActiveScene();
-        if (scene.name == "Transition" && fadeState.Equals(FadeState.High))
-        {
-            StartToFadeAway();
-            StopAllSoundEffects();
-        }
-        else if (scene.name != "Transition" && fadeState.Equals(FadeState.Low))
-        {
-            StartToFadeIn();
-            OpenAllSoundEffects();
-        }
     }
 
     #region public Method
@@ -95,6 +92,7 @@ public class MusicController : MonoBehaviour {
     /// </summary>
     public void StopAllMusic()
     {
+        isMute = true;
         foreach(var audio in AllMusicAudioSource)
         {
             audio.mute = true;
@@ -105,6 +103,7 @@ public class MusicController : MonoBehaviour {
     /// </summary>
     public void StopAllSoundEffects()
     {
+        isMute = true;
         foreach (var audio in AllSoundEffectsAudioSource)
         {
             audio.mute = true;
@@ -115,6 +114,7 @@ public class MusicController : MonoBehaviour {
     /// </summary>
     public void OpenAllMusic()
     {
+        isMute = false;
         foreach (var audio in AllMusicAudioSource)
         {
             audio.mute = false;
@@ -125,6 +125,7 @@ public class MusicController : MonoBehaviour {
     /// </summary>
     public void OpenAllSoundEffects()
     {
+        isMute = false;
         foreach (var audio in AllSoundEffectsAudioSource)
         {
             audio.mute = false;
@@ -150,6 +151,18 @@ public class MusicController : MonoBehaviour {
         StopCoroutine(FadeInCoroutine);
         fadeState = FadeState.High;
     }
+    /// <summary>
+    /// 调整所有音量大小
+    /// </summary>
+    /// <param name="size"></param>
+    public void SetAllSound(float size)
+    {
+        volume = size;
+        foreach (var item in AllMusicAudios)
+        {
+            item.GetComponent<AudioSource>().volume = size;
+        }
+    }
     #endregion
 
     #region private Method
@@ -162,7 +175,7 @@ public class MusicController : MonoBehaviour {
             AudioSource audioSource;
             DontDestroyOnLoad(go);
             audioSource = go.GetComponent<AudioSource>();
-            audioSource.volume = 0.5f;
+            audioSource.volume = volume;
             AllMusicAudioSource.Add(audioSource);
         }
     }
@@ -175,7 +188,7 @@ public class MusicController : MonoBehaviour {
             AudioSource audioSource;
             DontDestroyOnLoad(go);
             audioSource = go.GetComponent<AudioSource>();
-            audioSource.volume = 0.5f;
+            audioSource.volume = volume;
             AllSoundEffectsAudioSource.Add(audioSource);
         }
     }

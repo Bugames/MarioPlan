@@ -138,6 +138,7 @@ public class GameController : MonoBehaviour {
 		string musicName = "Music/" + SystemController.Instance.GetSongName();
 		AudioClip bgm = Resources.Load<AudioClip>(musicName);
 		MusicController.Instance.BGMGameObject.GetComponent<AudioSource>().clip = bgm;
+		PlayController.Instance.animator.enabled = true;
 		PlayController.Instance.rigidbody2D.simulated = true;
 		MusicController.Instance.BGMGameObject.GetComponent<AudioSource>().Play();
 	}

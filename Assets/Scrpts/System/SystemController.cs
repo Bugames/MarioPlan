@@ -14,6 +14,10 @@ public class SystemController : MonoBehaviour {
 	/// 当前歌曲的索引
 	/// </summary>
 	public int songIndex = 0;
+	/// <summary>
+	/// 歌曲名
+	/// </summary>
+	public string[] songs;
 	#endregion
 
 	#region 单例实现
@@ -56,11 +60,26 @@ public class SystemController : MonoBehaviour {
 	private void Start()
 	{
 		songDic = new Dictionary<int, string>();
+		Init();
 	}
 	#region public Method
 	public void Init()
     {
-		//读取歌曲信息
+        for (int i = 0; i < songs.Length; i++)
+        {
+			songDic.Add(i + 1, songs[i]);
+		}
+    }
+	/// <summary>
+	/// 得到歌曲名
+	/// </summary>
+	/// <returns></returns>
+	public string GetSongName()
+    {
+		if (songDic.Count == 0|| !songDic.ContainsKey(songIndex))
+			return "";
+
+		return songDic[songIndex];
     }
 	#endregion
 

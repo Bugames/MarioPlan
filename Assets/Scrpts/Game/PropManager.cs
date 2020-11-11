@@ -21,6 +21,16 @@ public class PropManager : MonoBehaviour {
 	/// 两个判定点
 	/// </summary>
 	public GameObject[] points;
+	/// <summary>
+	/// 道具初始位置x
+	/// </summary>
+	[HideInInspector]
+	public float initPositionX;
+	/// <summary>
+	/// 音符控制实例
+	/// </summary>
+	[HideInInspector]
+	public NoteController noteController;
 	#endregion
 
 	#region 单例实现
@@ -53,10 +63,6 @@ public class PropManager : MonoBehaviour {
 	/// </summary>
 	private Dictionary<NoteType, GameObject> propDic;
 	/// <summary>
-	/// 道具初始位置x
-	/// </summary>
-	private float initPositionX;
-	/// <summary>
 	/// 道具Y位置
 	/// </summary>
 	private float[] initPositionY;
@@ -64,10 +70,6 @@ public class PropManager : MonoBehaviour {
 	/// 当前地图索引
 	/// </summary>
 	private int noteMapIndex = 0;
-	/// <summary>
-	/// 音符控制实例
-	/// </summary>
-	private NoteController noteController;
 	/// <summary>
 	/// 临时存储的对象列表
 	/// </summary>
@@ -90,11 +92,6 @@ public class PropManager : MonoBehaviour {
     {
 		noteController = NoteController.Instance;
 		InitPropDic();
-		initPositionY = new float[points.Length];
-        for (int i = 0; i < points.Length; i++)
-        {
-			initPositionY[i] = points[i].transform.position.y;
-		}
 		initPositionX = initXGameObject.transform.position.x;
     }
 
@@ -106,7 +103,15 @@ public class PropManager : MonoBehaviour {
 
 	public void UpdateProp()
 	{
-		if(noteMapIndex>= noteController.currNoteMap.two.Count)
+		if(noteMapIndex==0)
+        {
+			initPositionY = new float[points.Length];
+			for (int i = 0; i < points.Length; i++)
+			{
+				initPositionY[i] = points[i].transform.position.y;
+			}
+		}
+		if(noteMapIndex < noteController.currNoteMap.two.Count)
         {
 			NoteType type1 = noteController.currNoteMap.two[noteMapIndex];
 			var perfeb1 = GetPropByType(type1);
@@ -117,7 +122,7 @@ public class PropManager : MonoBehaviour {
 				tempList.Add(go);
 			}
 
-			NoteType type2 = noteController.currNoteMap.two[noteMapIndex];
+			NoteType type2 = noteController.currNoteMap.one[noteMapIndex];
 			var perfeb2 = GetPropByType(type2);
 			if (perfeb2 != null)
 			{
@@ -134,23 +139,23 @@ public class PropManager : MonoBehaviour {
 	public void InitPropDic()
     {
 		var bomb = Resources.Load<GameObject>("Prop/Bomb");
-		propDic.Add(NoteType.StarHead, bomb);
+		propDic.Add(NoteType.Bomb, bomb);
 
 		var greenT = Resources.Load<GameObject>("Prop/GreenT");
-		propDic.Add(NoteType.StarBody, greenT);
+		propDic.Add(NoteType.TurtleShellGreen, greenT);
 
 		var redT = Resources.Load<GameObject>("Prop/redT");
-		propDic.Add(NoteType.StarTail, redT);
+		propDic.Add(NoteType.TurtleShellRed, redT);
 
-		//var StarHead = Resources.Load<GameObject>("Prop/StarHead");
-		//propDic.Add(NoteType.StarHead, StarHead);
+        var StarHead = Resources.Load<GameObject>("Prop/StarHead");
+        propDic.Add(NoteType.StarHead, StarHead);
 
-		//var StarBody = Resources.Load<GameObject>("Prop/StarBody");
-		//propDic.Add(NoteType.StarBody, StarBody);
+        var StarBody = Resources.Load<GameObject>("Prop/StarBody");
+        propDic.Add(NoteType.StarBody, StarBody);
 
-		//var StarTail = Resources.Load<GameObject>("Prop/StarTail");
-		//propDic.Add(NoteType.StarTail, StarTail);
-	}
+        var StarTail = Resources.Load<GameObject>("Prop/StarTail");
+        propDic.Add(NoteType.StarTail, StarTail);
+    }
 	/// <summary>
 	/// 根据音符类型返回预制体
 	/// </summary>

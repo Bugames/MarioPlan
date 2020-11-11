@@ -11,9 +11,10 @@ GameObject:
   - component: {fileID: 5148046090301426577}
   - component: {fileID: 5148046090301426582}
   - component: {fileID: 5148046090301426583}
+  - component: {fileID: 1739687887}
   m_Layer: 0
   m_Name: RedT
-  m_TagString: Untagged
+  m_TagString: Power
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -108,3 +109,19 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 0.8125}
   m_EdgeRadius: 0
+--- !u!114 &1739687887
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5148046090301426576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 298ab6ced9e562440b2815e59f6b070c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  score: 200
+  scoreCof: 1
+  noteType: 1
+  buckleBlood: 2

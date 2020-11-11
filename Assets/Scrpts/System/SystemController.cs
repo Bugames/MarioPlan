@@ -62,8 +62,8 @@ public class SystemController : MonoBehaviour {
 		songDic = new Dictionary<int, string>();
 		Init();
 	}
-	#region public Method
-	public void Init()
+    #region public Method
+    public void Init()
     {
         for (int i = 0; i < songs.Length; i++)
         {

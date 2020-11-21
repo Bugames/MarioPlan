@@ -7,9 +7,9 @@ public class RoleText : MonoBehaviour
 {
     public GameObject role;
 
-    private void Update()
+    private void Start()
     {
-        role.GetComponent<Rigidbody2D>().velocity = new Vector2(5.0f, 0.0f);
-        Debug.Log(role.GetComponent<Rigidbody2D>().velocity);
+        Debug.Log(GetComponent<CircleCollider2D>().radius);
     }
 }
+

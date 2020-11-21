@@ -21,6 +21,15 @@ public class NoteController : MonoBehaviour {
 		StarBody,			//星星身体
 		StarTail			//星星尾
     }
+	/// <summary>
+	/// 击打判断
+	/// </summary>
+	public enum Performance
+    {
+		Miss,
+		Great,
+		Perfect
+    }		
 
 	/// <summary>
 	/// 音符地图
@@ -104,8 +113,6 @@ public class NoteController : MonoBehaviour {
     {
 		TextAsset text = Resources.Load<TextAsset>(fillename);
 		string[] lines = Regex.Split(text.text, "\r\n", RegexOptions.IgnoreCase);
-		Debug.Log(lines[0].Length);
-		Debug.Log(lines[1].Length);
         for (int i = 0; i < lines[0].Length; i++)
         {
 			if(!lines[0][i].Equals(' '))
@@ -116,8 +123,44 @@ public class NoteController : MonoBehaviour {
 		}
 		bpm = Convert.ToInt32(lines[2]);
 	}
+	/// <summary>
+	/// 得到分数
+	/// </summary>
+	/// <param name="noteGrade"></param>
+	/// <param name="noteCof"></param>
+	/// <param name="comboCount"></param>
+	/// <param name="performance"></param>
+	/// <param name="isFever"></param>
+	/// <returns>分数</returns>
+	public uint GetGrade(uint noteGrade,float noteCof, uint comboCount, Performance performance,bool isFever=false)
+    {
+		float times = 10 + comboCount / 10;
+		times /= 10;
+		if (times > 1.5f)
+			times = 1.5f;
 
+		float feverScore = 1.0f;
+		if (isFever)
+			feverScore = 1.5f;
 
+		float perCof = 0.0f;
+        switch (performance)
+        {
+            case Performance.Miss: 
+				perCof = 0.0f;
+				break;
+			case Performance.Great:
+				perCof = 0.5f;
+				break;
+			case Performance.Perfect:
+				perCof = 1.0f;
+				break;
+		}
+
+		uint grade = (uint)(noteGrade * noteCof * times * perCof * feverScore);
+		return grade;
+
+	}
 	#endregion
 
 	#region private Method

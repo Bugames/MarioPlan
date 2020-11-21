@@ -18,8 +18,9 @@ public class GameShow : MonoBehaviour {
 	/// </summary>
 	public Text gradeText;
 	/// <summary>
-	/// 当前成绩
+	/// 当前成绩(显示)
 	/// </summary>
+	[HideInInspector]
 	public uint currgrade { get; private set; } = 0;
 	/// <summary>
 	/// Combo文本
@@ -28,6 +29,7 @@ public class GameShow : MonoBehaviour {
 	/// <summary>
 	/// 当前Combocishu(显示)
 	/// </summary>
+	[HideInInspector]
 	public int currComboCount { get; private set; } = 0;
 	/// <summary>
 	/// 血量进度跳
@@ -37,7 +39,7 @@ public class GameShow : MonoBehaviour {
 	/// 当前血量
 	/// </summary>
 	[HideInInspector]
-	public float blood;
+	public float blood = 0.0f;
 	/// <summary>
 	/// 最大血量
 	/// </summary>
@@ -65,28 +67,32 @@ public class GameShow : MonoBehaviour {
 	/// 间隔时间
 	/// </summary>
 	private float addTime;
-	#endregion
+    #endregion
+
+    private void Start()
+    {
+		blood = maxBlood;
+    }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.R))
+		if(GameController.Instance.currGameState==GameController.GameState.Playing)
         {
-			totalGrade = currgrade + 200;
-			totalCombo += 1;
+			ShowComboCount(totalCombo);
+			ShowGrade(totalGrade);
+			ShowBlood(blood);
 		}
-		if (Input.GetKeyDown(KeyCode.T))
-		{
-			totalCombo = 0;
-		}
-		ShowComboCount(totalCombo);
-		ShowGrade(totalGrade);
+		if(blood<=0)
+        {
+			GameController.Instance.currGameState = GameController.GameState.End;
+        }
 	}
 
-	#region public Method
+#region public Method
 
-	#endregion
+#endregion
 
-	#region private Method
+#region private Method
 	/// <summary>
 	/// 动态显示Combo次数
 	/// </summary>
@@ -107,6 +113,7 @@ public class GameShow : MonoBehaviour {
 		}
 		else
 		{
+			outTime = 1.0f;
 			comboGo.SetActive(true);
 			if (addTime < 0.05f)
 			{
@@ -155,6 +162,15 @@ public class GameShow : MonoBehaviour {
 		}
 
 	}
-	#endregion
+	/// <summary>
+	/// 显示血量
+	/// </summary>
+	/// <param name="blood"></param>
+	private void ShowBlood(float blood)
+    {
+		float bloodF = blood / maxBlood;
+		bloodSlider.value = bloodF;
+    }
+#endregion
 
 }

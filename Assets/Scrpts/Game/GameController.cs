@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -44,10 +43,9 @@ public class GameController : MonoBehaviour {
 	/// 结束返回按钮
 	/// </summary>
 	public Button endReturnButton;
-	#endregion
-
-	#region 单例实现
-	public static GameController Instance 
+    #endregion
+    #region 单例实现
+    public static GameController Instance 
 	{
 		get
 		{
@@ -96,7 +94,10 @@ public class GameController : MonoBehaviour {
 
     private void Update()
     {
-		
+		if(currGameState==GameState.End)
+        {
+			EnterGameEnd();
+		}
     }
 
     #region public Method
@@ -117,6 +118,7 @@ public class GameController : MonoBehaviour {
 
 		pauseMenu.GetComponent<TwoSelect>().second.onClick.AddListener(delegate ()
 		{
+			Time.timeScale = 1.0f;
 			SceneController.Instance.EnterMainWorldScene();
 			MusicController.Instance.BGMGameObject.GetComponent<AudioSource>().Pause();
 			MusicController.Instance.BGMGameObject.GetComponent<AudioSource>().clip = null;
@@ -135,15 +137,10 @@ public class GameController : MonoBehaviour {
 		string musicName = "Music/" + SystemController.Instance.GetSongName();
 		AudioClip bgm = Resources.Load<AudioClip>(musicName);
 		MusicController.Instance.BGMGameObject.GetComponent<AudioSource>().clip = bgm;
+		PlayController.Instance.animator.enabled = true;
+		PlayController.Instance.rigidbody2D.simulated = true;
 		MusicController.Instance.BGMGameObject.GetComponent<AudioSource>().Play();
 	}
-	/// <summary>
-	/// 触发游戏结束
-	/// </summary>
-	public void EndGame()
-    {
-
-    }
 	/// <summary>
 	/// 游戏暂停
 	/// </summary>
@@ -169,6 +166,7 @@ public class GameController : MonoBehaviour {
 	/// </summary>
 	public void EnterGameEnd()
     {
+		PlayController.Instance.rigidbody2D.simulated = false;
 		endMenu.SetActive(true);
 	}
 	
@@ -183,9 +181,30 @@ public class GameController : MonoBehaviour {
 			startTime -= Time.deltaTime;
 			yield return 0;
 		}
-		Time.timeScale = 1.0f;
 		currGameState = GameState.Playing;
 		StartGame();
+	}
+	/// <summary>
+	/// 更新GameShow
+	/// </summary>
+	/// <param name="score"></param>
+	/// <param name="scoreCof"></param>
+	/// <param name="noteType"></param>
+	/// <param name="buckleBlood"></param>
+	public void UpdateGameShow(uint score,float scoreCof, NoteController.NoteType noteType,NoteController.Performance per)
+    {
+		if (noteType != NoteController.NoteType.None && noteType != NoteController.NoteType.StarBody&&per!=NoteController.Performance.Miss)
+			currGameShow.totalCombo += 1;
+
+		currGameShow.totalGrade += NoteController.Instance.GetGrade(score, scoreCof, (uint)currGameShow.totalCombo, per);
+    }
+	/// <summary>
+	/// 更新血量
+	/// </summary>
+	/// <param name="buckleBlood"></param>
+	public void UpdateBlood(int buckleBlood)
+    {
+		currGameShow.blood -= buckleBlood;
 	}
 	#endregion
 

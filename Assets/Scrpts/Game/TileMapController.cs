@@ -21,6 +21,12 @@ public class TileMapController : MonoBehaviour {
 	/// 当前人物
 	/// </summary>
 	public GameObject role;
+	/// <summary>
+	/// 道具管理实例
+	/// </summary>
+	[HideInInspector]
+	public PropManager propManager;
+	bool isPlay=false;
 	#endregion
 
 	#region 单例实现
@@ -81,9 +87,9 @@ public class TileMapController : MonoBehaviour {
 	/// </summary>
 	private GameController gameController;
 	/// <summary>
-	/// 道具管理实例
+	/// 最大索引
 	/// </summary>
-	private PropManager propManager;
+	private int maxIndex;
 	#endregion
 
 	private void Awake()
@@ -105,12 +111,26 @@ public class TileMapController : MonoBehaviour {
 		InitTile();
 		InitSky();
 		lastpostion0 = role.transform.position;
+		maxIndex = propManager.noteController.currNoteMap.two.Count;
 	}
 
     private void Update()
     {
-		if(gameController.currGameState==GameController.GameState.Playing)
-        {
+
+		if (gameController.currGameState == GameController.GameState.Playing)
+		{
+            if (propManager.initPositionX - role.transform.position.x > propManager.interval)
+            {
+                MusicController.Instance.BGMGameObject.GetComponent<AudioSource>().Play();
+            }
+            float maxPositionX = propManager.initPositionX + maxIndex * propManager.interval;
+			if (role.transform.position.x - maxPositionX > 10.0f)
+			{
+				gameController.currGameState = GameController.GameState.End;
+				return;
+			}
+
+
 			UpdataMap();
 		}
 	}
@@ -121,9 +141,12 @@ public class TileMapController : MonoBehaviour {
 		if (role.transform.position.x - lastpostion0.x > skyLength)
 		{
 			lastpostion0 = role.transform.position;
-			for(int i=0;i<skyLength;++i)
-            {
+			for (int i = 0; i < skyLength; ++i)
+			{
 				UpdateInitTile();
+			}
+			for (int i = 0; i < skyLength * 2; i++)
+			{
 				propManager.UpdateProp();
 			}
 			if(updatecount==0)

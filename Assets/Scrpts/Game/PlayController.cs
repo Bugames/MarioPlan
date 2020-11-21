@@ -96,7 +96,6 @@ public class PlayController : MonoBehaviour {
 	private float offset;
 	private float lastX;
 	private float screenWidth;
-	private bool newTouch;
      #endregion
 
 	private void Awake()
@@ -214,12 +213,16 @@ public class PlayController : MonoBehaviour {
 				Touch touch = Input.GetTouch(0);
 				if (touch.phase == TouchPhase.Began)
 				{
-					newTouch = true;
 					start = Time.time;
+					isQuickAttack = true;
+					isAttack = false;
+					animator.SetBool("QuickAttack", isQuickAttack);
+					animator.SetBool("Attack", isAttack);
+					Debug.Log("短按");
 				}
 				else if(touch.phase==TouchPhase.Stationary)
                 {
-					if (newTouch && Time.time - start <= 0.4f)
+					if (Time.time - start >= 0.4f)
 					{
 						isQuickAttack = false;
 						isAttack = true;
@@ -227,15 +230,6 @@ public class PlayController : MonoBehaviour {
 						animator.SetBool("Attack", isAttack);
 						Debug.Log("长按");
 					}
-				}
-				else
-                {
-					newTouch = false;
-					isQuickAttack = true;
-					isAttack = false;
-					animator.SetBool("QuickAttack", isQuickAttack);
-					animator.SetBool("Attack", isAttack);
-					Debug.Log("短按");
 				}
 
 				Vector3 touchPosition = touch.position;
@@ -256,27 +250,22 @@ public class PlayController : MonoBehaviour {
 
 				if (touch1.phase == TouchPhase.Began && touch2.phase == TouchPhase.Began)
 				{
-					newTouch = true;
 					start = Time.time;
+					isQuickAttack = true;
+					isAttack = false;
+					animator.SetBool("QuickAttack", isQuickAttack);
+					animator.SetBool("Attack", isAttack);
+					Debug.Log("短按");
 				}
 				else if (touch1.phase == TouchPhase.Stationary && touch1.phase == TouchPhase.Stationary)
 				{
-					if (newTouch && Time.time - start <= 0.4f)
+					if (Time.time - start >= 0.4f)
 					{
 						isQuickAttack = false;
 						isAttack = true;
 						animator.SetBool("QuickAttack", isQuickAttack);
 						animator.SetBool("Attack", isAttack);
 						Debug.Log("长按");
-					}
-					else
-                    {
-						newTouch = false;
-						isQuickAttack = true;
-						isAttack = false;
-						animator.SetBool("QuickAttack", isQuickAttack);
-						animator.SetBool("Attack", isAttack);
-						Debug.Log("短按");
 					}
 				}
 
